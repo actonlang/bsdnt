@@ -74,7 +74,7 @@ pub fn build(b: *std.build.Builder) void {
     };
 
     lib.addCSourceFiles(&lib_sources, common_cflags);
-    lib.addIncludePath(".");
+    lib.addIncludePath(.{ .path = "." });
     lib.linkLibC();
 
     lib.installConfigHeader(config_header, .{ .dest_rel_path = "bsdnt/config.h" });
