@@ -11,7 +11,7 @@ pub fn build(b: *std.build.Builder) void {
     const want_assert = b.option(bool, "want_assert", "Enable asserts") orelse false;
     const want_redzones = b.option(bool, "want_redzones", "Enable redzones") orelse true;
 
-    const platform_byte_order: u16 = if (target.getCpuArch().endian() == std.builtin.Endian.Little) 0x10 else 0x20;
+    const platform_byte_order: u16 = if (target.getCpuArch().endian() == std.builtin.Endian.little) 0x10 else 0x20;
 
     const config_header = b.addConfigHeader(
         .{
@@ -73,7 +73,10 @@ pub fn build(b: *std.build.Builder) void {
         "zz.c",
     };
 
-    lib.addCSourceFiles(&lib_sources, common_cflags);
+    lib.addCSourceFiles(.{
+        .files = &lib_sources,
+        .flags = common_cflags
+    });
     lib.addIncludePath(.{ .path = "." });
     lib.linkLibC();
 
