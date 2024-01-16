@@ -3,15 +3,14 @@ const print = @import("std").debug.print;
 const builtin = @import("builtin");
 const tgt = @import("builtin").target;
 
-
-
-pub fn build(b: *std.build.Builder) void {
+pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
     const target = b.standardTargetOptions(.{});
+    const t = target.result;
     const want_assert = b.option(bool, "want_assert", "Enable asserts") orelse false;
     const want_redzones = b.option(bool, "want_redzones", "Enable redzones") orelse true;
 
-    const platform_byte_order: u16 = if (target.getCpuArch().endian() == std.builtin.Endian.little) 0x10 else 0x20;
+    const platform_byte_order: u16 = if (t.cpu.arch.endian() == .little) 0x10 else 0x20;
 
     const config_header = b.addConfigHeader(
         .{
