@@ -738,7 +738,7 @@ char * nn_get_str(nn_src_t a, len_t m)
    /* 9.63... is log_10(2^32) */
    size_t i = 0, j;
    size_t digits = (long) ceil(m * 9.632959861247398 * (WORD_BITS/32)) + (m == 0);
-   char * str = (char *) malloc(digits + 1);
+   char * str = (char *) bsdnt_malloc(digits + 1);
    word_t ci, d = 10UL << (WORD_BITS - 4);
    nn_t q1, q2, t;
    TMP_INIT;
@@ -872,7 +872,7 @@ void nn_print(nn_src_t a, len_t m)
 
    printf("%s", str);
 
-   free(str);
+   bsdnt_free(str);
 }
 
 #endif

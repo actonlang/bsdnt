@@ -55,7 +55,7 @@ typedef struct
 rand_ctx skiss_init(void)
 {   
    long i;
-	rand_ctx c = malloc(sizeof(skiss_ctx));
+	rand_ctx c = bsdnt_malloc(sizeof(skiss_ctx));
 
    CTX(c)->carry = WORD(362);
 	CTX(c)->xcng = WORD(1236789);
@@ -138,7 +138,7 @@ word_t refill(rand_ctx c)
 rand_ctx skiss_init(void)
 {   
    word_t i;
-	rand_ctx c = malloc(sizeof(skiss_ctx));
+	rand_ctx c = bsdnt_malloc(sizeof(skiss_ctx));
     
    CTX(c)->carry = WORD(36243678541);
 	CTX(c)->xcng = WORD(12367890123456);

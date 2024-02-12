@@ -48,14 +48,14 @@ void zz_inits(zz_ptr num, ...)
 
 void zz_init_fit(zz_ptr r, len_t m)
 {
-   r->n = (nn_t) malloc(sizeof(word_t)*m);
+   r->n = (nn_t) bsdnt_malloc(sizeof(word_t)*m);
    r->alloc = m;
    r->size = 0;
 }
 
 void zz_clear(zz_ptr r)
 {
-   free(r->n);
+   bsdnt_free(r->n);
 }
 
 void zz_clears(zz_ptr num, ...)
@@ -74,7 +74,7 @@ void zz_fit(zz_ptr r, len_t m)
 {
    if (r->alloc < m) 
    {
-      r->n = (nn_t) realloc(r->n, sizeof(word_t)*m);
+      r->n = (nn_t) bsdnt_realloc(r->n, sizeof(word_t)*m);
       r->alloc = m;
    }
 }
@@ -894,7 +894,7 @@ char * zz_get_str(zz_srcptr a)
    if (a->size < 0)
    {
       size_t len = strlen(str);
-      str = (char *) realloc(str, len + 2);
+      str = (char *) bsdnt_realloc(str, len + 2);
       for (i = len + 1; i >= 1; i--)
          str[i] = str[i - 1];
       str[0] = '-';
@@ -936,5 +936,5 @@ void zz_print(zz_srcptr a)
 
    printf("%s", str);
 
-   free(str);
+   bsdnt_free(str);
 }

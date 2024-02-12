@@ -42,7 +42,7 @@ typedef struct kiss_ctx
 
 rand_ctx kiss_init(void)
 {
-	rand_ctx c = malloc(sizeof(kiss_ctx));
+	rand_ctx c = bsdnt_malloc(sizeof(kiss_ctx));
 
    CTX(c)->w = WORD(521288629);
 	CTX(c)->z = WORD(362436069);
@@ -86,7 +86,7 @@ typedef struct kiss_ctx
 
 rand_ctx kiss_init(void)
 {
-	rand_ctx c = malloc(sizeof(kiss_ctx));
+	rand_ctx c = bsdnt_malloc(sizeof(kiss_ctx));
 
    CTX(c)->x = WORD(1234567890987654321);
 	CTX(c)->c = WORD(123456123456123456); 

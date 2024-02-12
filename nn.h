@@ -90,7 +90,7 @@ void nn_test_random(nn_t a, rand_t state, len_t m);
 static inline
 nn_t nn_init(len_t m)
 {
-   if (m) return (nn_t) malloc(m*sizeof(word_t));
+   if (m) return (nn_t) bsdnt_malloc(m*sizeof(word_t));
    else return NULL;
 }
 
@@ -101,7 +101,7 @@ nn_t nn_init(len_t m)
 static inline
 void nn_clear(nn_t a)
 {
-   free(a);
+   bsdnt_free(a);
 }
 
 /**********************************************************************

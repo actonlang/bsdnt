@@ -52,6 +52,18 @@
  extern "C" {
 #endif
 
+void *bsdnt_malloc(size_t size);
+void *bsdnt_realloc(void* ptr, size_t size);
+void bsdnt_free(void* ptr);
+
+typedef void *(*bsdnt_malloc_func)(size_t size);
+typedef void *(*bsdnt_realloc_func)(void* ptr, size_t size);
+typedef void (*bsdnt_free_func)(void* ptr);
+
+int bsdnt_replace_allocator(bsdnt_malloc_func malloc_func,
+                            bsdnt_realloc_func realloc_func,
+                            bsdnt_free_func free_func);
+
 #ifndef HAVE_ARCH_types
 
 typedef unsigned long word_t;
@@ -142,7 +154,7 @@ typedef struct mod_preinv1_t
       (__t = (__tmp_t *) alloca(sizeof(__tmp_t)), \
        __t->next = __tmp_root, \
        __tmp_root = __t, \
-       __t->block = malloc(size)) : \
+       __t->block = bsdnt_malloc(size)) : \
       alloca(size))
 
 #define TMP_ALLOC(size) \
@@ -150,7 +162,7 @@ typedef struct mod_preinv1_t
 
 #define TMP_END \
    while (__tmp_root) { \
-      free(__tmp_root->block); \
+      bsdnt_free(__tmp_root->block); \
       __tmp_root = __tmp_root->next; \
    }
 

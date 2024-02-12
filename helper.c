@@ -26,6 +26,7 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <errno.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -34,6 +35,64 @@
 #include "helper.h"
 #include "helper_arch.h"
 #include "nn.h"
+
+/**********************************************************************
+
+    Memory allocation functions
+
+**********************************************************************/
+
+typedef struct {
+  bsdnt_malloc_func malloc;
+  bsdnt_realloc_func realloc;
+  bsdnt_free_func free;
+} bsdnt__allocator_t;
+
+static bsdnt__allocator_t bsdnt__allocator = {
+  malloc,
+  realloc,
+  free,
+};
+
+int bsdnt_replace_allocator(bsdnt_malloc_func malloc_func,
+                            bsdnt_realloc_func realloc_func,
+                            bsdnt_free_func free_func) {
+  if (malloc_func == NULL || realloc_func == NULL ||
+      free_func == NULL) {
+    return -1;
+  }
+
+  bsdnt__allocator.malloc = malloc_func;
+  bsdnt__allocator.realloc = realloc_func;
+  bsdnt__allocator.free = free_func;
+
+  return 0;
+}
+
+void* bsdnt_malloc(size_t size) {
+    if (size > 0)
+        return bsdnt__allocator.malloc(size);
+    return NULL;
+}
+
+void* bsdnt_realloc(void* ptr, size_t size) {
+  if (size > 0)
+    return bsdnt__allocator.realloc(ptr, size);
+  bsdnt_free(ptr);
+  return NULL;
+}
+
+void bsdnt_free(void* ptr) {
+  int saved_errno;
+
+  /* The system allocator the assumption that errno is not modified but custom
+   * allocators may not be so careful.
+   */
+  saved_errno = errno;
+  bsdnt__allocator.free(ptr);
+  errno = saved_errno;
+}
+
 
 /**********************************************************************
  
@@ -94,7 +153,7 @@ void bsdnt_printf(const char * str, ...)
 {
    va_list ap;
    size_t len = strlen(str);
-   char * str2 = (char *) malloc(len + 1);
+   char * str2 = (char *) bsdnt_malloc(len + 1);
    int w1 = 0, w2 = 0;
    void * w3;
    double d;
@@ -178,7 +237,7 @@ void bsdnt_printf(const char * str, ...)
    }
 
    va_end(ap);
-   free(str2);
+   bsdnt_free(str2);
 }
 
 #ifndef HAVE_NATIVE_precompute_inverse2

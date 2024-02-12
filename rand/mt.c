@@ -117,7 +117,7 @@ typedef struct
 
 rand_ctx mt_init(void)
 {
-	rand_ctx c = malloc(sizeof(mt_ctx));
+	rand_ctx c = bsdnt_malloc(sizeof(mt_ctx));
 
 	IX(c) = NN + 1;
 	MG(c)[0] = 0;
@@ -246,7 +246,7 @@ typedef struct
 
 rand_ctx mt_init(void)
 {
-	rand_ctx c = malloc(sizeof(mt_ctx));
+	rand_ctx c = bsdnt_malloc(sizeof(mt_ctx));
 
 	IX(c) = NN + 1;
 	MG(c)[0] = 0;
