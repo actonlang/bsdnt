@@ -76,24 +76,24 @@ pub fn build(b: *std.Build) void {
         .files = &lib_sources,
         .flags = common_cflags
     });
-    lib.addIncludePath(.{ .path = "." });
+    lib.addIncludePath(b.path("."));
     lib.linkLibC();
 
-    lib.installConfigHeader(config_header, .{ .dest_rel_path = "bsdnt/config.h" });
-    lib.installHeader("helper_arch.h", "bsdnt/helper_arch.h");
-    lib.installHeader("helper.h", "bsdnt/helper.h");
-    lib.installHeader("nn_arch.h", "bsdnt/nn_arch.h");
-    lib.installHeader("nn.h", "bsdnt/nn.h");
-    lib.installHeader("nn_linear_arch.h", "bsdnt/nn_linear_arch.h");
-    lib.installHeader("nn_quadratic_arch.h", "bsdnt/nn_quadratic_arch.h");
-    lib.installHeader("nn_subquadratic_arch.h", "bsdnt/nn_subquadratic_arch.h");
-    lib.installHeader("rand.h", "bsdnt/rand.h");
-    lib.installHeader("sha1.h", "bsdnt/sha1.h");
-    lib.installHeader("test.h", "bsdnt/test.h");
-    lib.installHeader("tuning.h", "bsdnt/tuning.h");
-    lib.installHeader("types_arch.h", "bsdnt/types_arch.h");
-    lib.installHeader("zz0.h", "bsdnt/zz0.h");
-    lib.installHeader("zz.h", "bsdnt/zz.h");
+    lib.installHeader(config_header.getOutput(), "bsdnt/config.h");
+    lib.installHeader(b.path("helper_arch.h"), "bsdnt/helper_arch.h");
+    lib.installHeader(b.path("helper.h"), "bsdnt/helper.h");
+    lib.installHeader(b.path("nn_arch.h"), "bsdnt/nn_arch.h");
+    lib.installHeader(b.path("nn.h"), "bsdnt/nn.h");
+    lib.installHeader(b.path("nn_linear_arch.h"), "bsdnt/nn_linear_arch.h");
+    lib.installHeader(b.path("nn_quadratic_arch.h"), "bsdnt/nn_quadratic_arch.h");
+    lib.installHeader(b.path("nn_subquadratic_arch.h"), "bsdnt/nn_subquadratic_arch.h");
+    lib.installHeader(b.path("rand.h"), "bsdnt/rand.h");
+    lib.installHeader(b.path("sha1.h"), "bsdnt/sha1.h");
+    lib.installHeader(b.path("test.h"), "bsdnt/test.h");
+    lib.installHeader(b.path("tuning.h"), "bsdnt/tuning.h");
+    lib.installHeader(b.path("types_arch.h"), "bsdnt/types_arch.h");
+    lib.installHeader(b.path("zz0.h"), "bsdnt/zz0.h");
+    lib.installHeader(b.path("zz.h"), "bsdnt/zz.h");
 
     b.installArtifact(lib);
 }
